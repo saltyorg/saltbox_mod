@@ -1,70 +1,45 @@
-# cloudbox_mod
-Blank Template to add custom Ansible roles to Cloudbox.
+# saltbox_mod
+Blank Template to add custom Ansible roles to Saltbox.
 
 ## How to use this template
 
 1. Clone this repo:
 
     ```bash
-    git clone https://github.com/Cloudbox/cloudbox_mod.git ~/cloudbox_mod
+    git clone https://github.com/saltyorg/saltbox_mod.git /opt/saltbox_mod
     ```
 
-1. CD into the `cloudbox_mod` folder:
+1. CD into the `saltbox_mod` folder:
 
     ```bash
-    cd ~/cloudbox_mod
-    ```
-
-1. If you have an Ansible vault password file, add the location to `ansible.cfg`:
-
-    To edit:
-
-    ```bash
-    nano ~/cloudbox_mod/ansible.cfg
-    ```
-
-    Add line (with path to your vault password file):
-    ```ini
-    vault_password_file = ~/.ansible_vault
-    ```
-
-    Final result:
-    ```ini
-    [defaults]
-    inventory = ~/cloudbox/inventories/local
-    callback_whitelist = profile_tasks
-    command_warnings = False
-    retry_files_enabled = False
-    hash_behaviour = merge
-    role_path = ~/cloudbox/roles
-    vault_password_file = ~/.ansible_vault
+    cd /opt/saltbox_mod
     ```
 
 1. Create folders for the Ansible role:
 
     ```bash
-    mkdir -p ~/cloudbox_mod/roles/newrole/tasks/
+    mkdir -p /opt/saltbox_mod/roles/newrole/tasks/
     ```
 
 1. Place the task file there:
 
     ```bash
-    touch ~/cloudbox_mod/roles/newrole/tasks/main.yml
+    touch /opt/saltbox_mod/roles/newrole/tasks/main.yml
     ```
 
 1. Add custom variables into `settings.yml`:
 
     ```
-    ~/cloudbox_mod/settings.yml
+    /opt/saltbox_mod/settings.yml
     ```
 
 
-1. Add the Ansible role to `cloudbox_mod.yml`:
+1. Add the Ansible role to `saltbox_mod.yml`:
 
     To edit:
 
     ```bash
-    nano ~/cloudbox_mod/cloudbox_mod.yml
+    nano /opt/saltbox_mod/saltbox_mod.yml
     ```
 
     Add the following line under `roles:`:
@@ -76,12 +51,12 @@ Blank Template to add custom Ansible roles to Cloudbox.
     ```yaml
     ---
     - hosts: localhost
-      vars_files:
+    vars_files:
         - settings.yml
-        - ['~/cloudbox/accounts.yml', '~/cloudbox/accounts.yml.default']
-        - ['~/cloudbox/settings.yml', '~/cloudbox/settings.yml.default']
-        - ['~/cloudbox/adv_settings.yml', '~/cloudbox/adv_settings.yml.default']
-      roles:
+        - ['/srv/git/saltbox/accounts.yml', '/srv/git/saltbox/defaults/accounts.yml.default']
+        - ['/srv/git/saltbox/settings.yml', '/srv/git/saltbox/defaults/settings.yml.default']
+        - ['/srv/git/saltbox/adv_settings.yml', '/srv/git/saltbox/defaults/adv_settings.yml.default']
+    roles:
         - { role: pre_tasks }
         - { role: myrole, tags: ['myrole'] }
         - { role: newrole, tags: ['newrole'] }
@@ -92,5 +67,5 @@ Blank Template to add custom Ansible roles to Cloudbox.
 1. Run the Ansible role:
 
     ```bash
-    sudo ansible-playbook cloudbox_mod.yml --tags newrole
+    sudo ansible-playbook saltbox_mod.yml --tags newrole
     ```
