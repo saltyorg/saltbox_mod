@@ -1,14 +1,14 @@
 ---
 - name: Remove existing Docker container
   docker_container:
-    name: "name"
+    name: "appname"
     state: absent
     container_default_behavior: compatibility
     tls_hostname: localhost
 
 - name: Create and start container
   docker_container:
-    name: name
+    name: "appname"
     image: "someuser/someimage"
     pull: true
     volumes:
@@ -18,9 +18,17 @@
     networks:
       - name: saltbox
         aliases:
-          - name
+          - appname
     labels:
       "com.github.saltbox.saltbox_managed": "true"
+      "traefik.enable": "true"
+      "traefik.http.routers.APPNAME.entrypoints": "websecure"
+      "traefik.http.routers.APPNAME.middlewares": "secureHeaders@file"
+      "traefik.http.routers.APPNAME.rule": "Host(`APPNAME.yourdomain.com`)"
+      "traefik.http.routers.APPNAME.service": "APPNAME"
+      "traefik.http.routers.APPNAME.tls.certresolver": "cfdns"
+      "traefik.http.routers.APPNAME.tls.options": "securetls@file"
+      "traefik.http.services.APPNAME.loadbalancer.server.port": "80"
     networks_cli_compatible: true
     network_mode: "{{ docker_networks_name_common }}"
     container_default_behavior: compatibility
