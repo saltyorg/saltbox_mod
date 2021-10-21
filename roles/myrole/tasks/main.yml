@@ -1,14 +1,33 @@
 ---
-- name: "Get {{ user }} UID"
-  shell: "id -u {{user}}"
-  register: uid
+- name: Remove existing Docker container
+  docker_container:
+    name: "name"
+    state: absent
+    container_default_behavior: compatibility
+    tls_hostname: localhost
 
-- name: "Get {{ user }} GID"
-  shell: "id -g {{ user }}"
-  register: gid
+- name: Create and start container
+  docker_container:
+    name: name
+    image: "someuser/someimage"
+    pull: true
+    volumes:
+      - "/mnt:/mnt"
+    env:
+      SOMEENV: "SOMEVALUE"
+    networks:
+      - name: saltbox
+        aliases:
+          - docker-socket-proxy
+    labels:
+      "com.github.saltbox.saltbox_managed": "true"
+    networks_cli_compatible: true
+    network_mode: "{{ docker_networks_name_common }}"
+    container_default_behavior: compatibility
+    purge_networks: true
+    restart_policy: unless-stopped
+    state: started
 
-- debug:
-    msg: "Your UID is {{ uid.stdout }}. Your GID is {{ gid.stdout }}."
-
-- debug:
-    msg: "Your favorite color is {{ favorite_color }}!"
+- name: Debug Test
+  debug:
+    msg: "Test var is {{ some_var }}"
