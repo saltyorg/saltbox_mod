@@ -20,15 +20,15 @@
         aliases:
           - appname
     labels:
-      "com.github.saltbox.saltbox_managed": "true"
-      "traefik.enable": "true"
-      "traefik.http.routers.APPNAME.entrypoints": "websecure"
-      "traefik.http.routers.APPNAME.middlewares": "secureHeaders@file"
-      "traefik.http.routers.APPNAME.rule": "Host(`APPNAME.yourdomain.com`)"
-      "traefik.http.routers.APPNAME.service": "APPNAME"
-      "traefik.http.routers.APPNAME.tls.certresolver": "cfdns"
-      "traefik.http.routers.APPNAME.tls.options": "securetls@file"
-      "traefik.http.services.APPNAME.loadbalancer.server.port": "80"
+      com.github.saltbox.saltbox_managed: "true"
+      traefik.enable: "true"
+      traefik.http.routers.APPNAME.entrypoints: "websecure"
+      traefik.http.routers.APPNAME.middlewares: "secureHeaders@file"
+      traefik.http.routers.APPNAME.rule: "Host(`APPNAME.yourdomain.com`)"
+      traefik.http.routers.APPNAME.service: "APPNAME"
+      traefik.http.routers.APPNAME.tls.certresolver: "cfdns"
+      traefik.http.routers.APPNAME.tls.options: "securetls@file"
+      traefik.http.services.APPNAME.loadbalancer.server.port: "80"
     networks_cli_compatible: true
     network_mode: "{{ docker_networks_name_common }}"
     container_default_behavior: compatibility
