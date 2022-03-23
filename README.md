@@ -3,10 +3,15 @@ Blank Template to add custom Ansible roles to Saltbox.
 
 ## How to use this template
 
-1. Clone this repo:
+1. Install  this repo:
 
     ```bash
     git clone https://github.com/saltyorg/saltbox_mod.git /opt/saltbox_mod
+    ```
+
+    or alternatively :
+    ```bash
+    sb install saltbox_mod
     ```
 
 1. CD into the `saltbox_mod` folder:
@@ -69,3 +74,27 @@ Blank Template to add custom Ansible roles to Saltbox.
     ```bash
     sudo ansible-playbook saltbox_mod.yml --tags newrole
     ```
+
+
+---
+Step 3 to 5 can be simplified by using the helloworld role  as a template.
+It should be usable without to much modification for most webapp that use a single web port.
+
+```bash
+cp -r /opt/saltbox_mod/roles/helloworld /opt/saltbox_mod/roles/newrole
+sed -i 's/helloworld/newrole/g' /opt/saltbox_mod/roles/defaults/main.yml
+```
+
+then edit the defaults settings.
+
+```bash
+nano /opt/saltbox_mod/roles/newrole/tasks/main.yml
+```
+
+At the very minimum, you may expect to update the following variables:
+```yaml
+newrole_web_port:
+newrole_docker_image:
+newrole_docker_envs_default:
+newrole_docker_volumes_default:
+```
