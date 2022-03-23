@@ -10,7 +10,7 @@ Blank Template to add custom Ansible roles to Saltbox.
     ```
 
     or alternatively :
-        ```bash
+    ```bash
     sb install saltbox_mod
     ```
 
