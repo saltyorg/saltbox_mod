@@ -1,13 +1,13 @@
 ---
 - name: Remove existing Docker container
-  docker_container:
+  community.docker.docker_container:
     name: "appname"
     state: absent
     container_default_behavior: compatibility
     tls_hostname: localhost
 
 - name: Create and start container
-  docker_container:
+  community.docker.docker_container:
     name: "appname"
     image: "someuser/someimage"
     pull: true
@@ -37,5 +37,5 @@
     state: started
 
 - name: Debug Test
-  debug:
+  ansible.builtin.debug:
     msg: "Test var is {{ some_var }}"
