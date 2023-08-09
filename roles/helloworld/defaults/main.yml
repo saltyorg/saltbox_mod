@@ -65,8 +65,7 @@ helloworld_docker_image_tag: "latest"
 helloworld_docker_image: "tutum/hello-world:{{ helloworld_docker_image_tag }}"
 
 # Ports
-helloworld_docker_ports_defaults:
-  - "{{ helloworld_web_port }}"
+helloworld_docker_ports_defaults: []
 helloworld_docker_ports_custom: []
 helloworld_docker_ports: "{{ helloworld_docker_ports_defaults
                              + helloworld_docker_ports_custom }}"
