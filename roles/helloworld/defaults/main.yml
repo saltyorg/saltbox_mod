@@ -30,8 +30,8 @@ helloworld_web_subdomain: "{{ helloworld_name }}"
 helloworld_web_domain: "{{ user.domain }}"
 helloworld_web_port: "80"
 helloworld_web_url: "{{ 'https://' + helloworld_web_subdomain + '.' + helloworld_web_domain
-                        if (reverse_proxy_is_enabled)
-                        else 'http://localhost:' + helloworld_web_port }}"
+                     if (helloworld_web_subdomain | length > 0)
+                     else helloworld_web_domain }}"
 
 ################################
 # DNS
@@ -47,8 +47,8 @@ helloworld_dns_proxy: "{{ dns.proxied }}"
 
 helloworld_traefik_sso_middleware: "{{ traefik_default_sso_middleware }}" #Remove this line if you don't need authelia authentication
 helloworld_traefik_middleware: "{{ traefik_default_middleware + ',' + helloworld_traefik_sso_middleware
-                              if (helloworld_traefik_sso_middleware | length > 0)
-                              else traefik_default_middleware }}"
+                                if (helloworld_traefik_sso_middleware | length > 0)
+                                else traefik_default_middleware }}"
 helloworld_traefik_certresolver: "{{ traefik_default_certresolver }}"
 helloworld_traefik_enabled: true
 
@@ -69,9 +69,7 @@ helloworld_docker_ports_defaults:
   - "{{ helloworld_web_port }}"
 helloworld_docker_ports_custom: []
 helloworld_docker_ports: "{{ helloworld_docker_ports_defaults
-                                + helloworld_docker_ports_custom
-                             if (not reverse_proxy_is_enabled)
-                             else [] + helloworld_docker_ports_custom }}"
+                             + helloworld_docker_ports_custom }}"
 
 # Envs
 helloworld_docker_envs_default:
@@ -80,41 +78,41 @@ helloworld_docker_envs_default:
   TZ: "{{ tz }}"
 helloworld_docker_envs_custom: {}
 helloworld_docker_envs: "{{ helloworld_docker_envs_default
-                               | combine(helloworld_docker_envs_custom) }}"
+                            | combine(helloworld_docker_envs_custom) }}"
 
 # Commands
 helloworld_docker_commands_default: []
 helloworld_docker_commands_custom: []
 helloworld_docker_commands: "{{ helloworld_docker_commands_default
-                                   + helloworld_docker_commands_custom }}"
+                                + helloworld_docker_commands_custom }}"
 
 # Volumes
 helloworld_docker_volumes_default:
   - "{{ helloworld_paths_location }}:/config"
 helloworld_docker_volumes_custom: []
 helloworld_docker_volumes: "{{ helloworld_docker_volumes_default
-                                  + helloworld_docker_volumes_custom
-                                  + docker_volumes_downloads_common }}"
+                               + helloworld_docker_volumes_custom
+                               + docker_volumes_downloads_common }}"
 
 # Devices
 helloworld_docker_devices_default: []
 helloworld_docker_devices_custom: []
 helloworld_docker_devices: "{{ helloworld_docker_devices_default
-                                  + helloworld_docker_devices_custom }}"
+                               + helloworld_docker_devices_custom }}"
 
 # Hosts
 helloworld_docker_hosts_default: []
 helloworld_docker_hosts_custom: []
 helloworld_docker_hosts: "{{ docker_hosts_common
-                                | combine(helloworld_docker_hosts_default)
-                                | combine(helloworld_docker_hosts_custom) }}"
+                             | combine(helloworld_docker_hosts_default)
+                             | combine(helloworld_docker_hosts_custom) }}"
 
 # Labels
 helloworld_docker_labels_default: {}
 helloworld_docker_labels_custom: {}
 helloworld_docker_labels: "{{ docker_labels_common
-                                 | combine(helloworld_docker_labels_default)
-                                 | combine(helloworld_docker_labels_custom) }}"
+                              | combine(helloworld_docker_labels_default)
+                              | combine(helloworld_docker_labels_custom) }}"
 
 # Hostname
 helloworld_docker_hostname: "{{ helloworld_name }}"
@@ -124,20 +122,20 @@ helloworld_docker_networks_alias: "{{ helloworld_name }}"
 helloworld_docker_networks_default: []
 helloworld_docker_networks_custom: []
 helloworld_docker_networks: "{{ docker_networks_common
-                                   + helloworld_docker_networks_default
-                                   + helloworld_docker_networks_custom }}"
+                                + helloworld_docker_networks_default
+                                + helloworld_docker_networks_custom }}"
 
 # Capabilities
 helloworld_docker_capabilities_default: []
 helloworld_docker_capabilities_custom: []
 helloworld_docker_capabilities: "{{ helloworld_docker_capabilities_default
-                                       + helloworld_docker_capabilities_custom }}"
+                                    + helloworld_docker_capabilities_custom }}"
 
 # Security Opts
 helloworld_docker_security_opts_default: []
 helloworld_docker_security_opts_custom: []
 helloworld_docker_security_opts: "{{ helloworld_docker_security_opts_default
-                                        + helloworld_docker_security_opts_custom }}"
+                                     + helloworld_docker_security_opts_custom }}"
 
 # Restart Policy
 helloworld_docker_restart_policy: unless-stopped
