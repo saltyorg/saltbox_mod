@@ -29,9 +29,9 @@ helloworld_paths_folders_list:
 helloworld_web_subdomain: "{{ helloworld_name }}"
 helloworld_web_domain: "{{ user.domain }}"
 helloworld_web_port: "80"
-helloworld_web_url: "{{ 'https://' + helloworld_web_subdomain + '.' + helloworld_web_domain
+helloworld_web_url: "{{ 'https://' + (helloworld_web_subdomain + '.' + helloworld_web_domain
                      if (helloworld_web_subdomain | length > 0)
-                     else helloworld_web_domain }}"
+                     else helloworld_web_domain) }}"
 
 ################################
 # DNS
@@ -45,12 +45,13 @@ helloworld_dns_proxy: "{{ dns.proxied }}"
 # Traefik
 ################################
 
-helloworld_traefik_sso_middleware: "{{ traefik_default_sso_middleware }}" #Remove this line if you don't need authelia authentication
-helloworld_traefik_middleware: "{{ traefik_default_middleware + ',' + helloworld_traefik_sso_middleware
-                                if (helloworld_traefik_sso_middleware | length > 0)
-                                else traefik_default_middleware }}"
+helloworld_traefik_sso_middleware: "{{ traefik_default_sso_middleware }}" # Set to "" if you don't need authelia authentication
+helloworld_traefik_middleware_default: "{{ traefik_default_middleware }}"
+helloworld_traefik_middleware_custom: ""
 helloworld_traefik_certresolver: "{{ traefik_default_certresolver }}"
 helloworld_traefik_enabled: true
+helloworld_traefik_api_enabled: false
+helloworld_traefik_api_endpoint: ""
 
 ################################
 # Docker
