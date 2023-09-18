@@ -1,100 +1,116 @@
 # saltbox_mod
-Blank Template to add custom Ansible roles to Saltbox.
 
-## How to use this template
+Environment for managing custom Ansible roles within a Saltbox host.
 
-1. Install  this repo:
+## Installation
 
-    ```bash
-    git clone https://github.com/saltyorg/saltbox_mod.git /opt/saltbox_mod
-    ```
+```bash
+sb install saltbox_mod
+```
 
-    or alternatively :
-    ```bash
-    sb install saltbox_mod
-    ```
+Alternatively:
+```bash
+git clone https://github.com/saltyorg/saltbox_mod.git /opt/saltbox_mod
+```
 
-1. CD into the `saltbox_mod` folder:
+## Usage
 
-    ```bash
-    cd /opt/saltbox_mod
-    ```
+### From Scratch
 
 1. Create folders for the Ansible role:
 
     ```bash
-    mkdir -p /opt/saltbox_mod/roles/newrole/tasks/
+    mkdir -p /opt/saltbox_mod/roles/newrole/{defaults,tasks}
     ```
 
-1. Place the task file there:
+1. Place the defaults and tasks files in there:
 
     ```bash
-    touch /opt/saltbox_mod/roles/newrole/tasks/main.yml
+    touch /opt/saltbox_mod/roles/newrole/{defaults,tasks}/main.yml
     ```
 
-1. Add custom variables into `settings.yml`:
+1. Code your role by adding variables and tasks to the respective files.
 
-    ```
+1. (_Legacy_*) Optionally, add custom variables into `settings.yml`:
+
+    ```bash
     /opt/saltbox_mod/settings.yml
     ```
-
-
-1. Add the Ansible role to `saltbox_mod.yml`:
+   
+   &ast; Use of the [Inventory system](https://docs.saltbox.dev/saltbox/inventory) is now preferred over this method.
+    
+1. Add the Ansible role and tags to the `saltbox_mod.yml` playbook:
 
     To edit:
 
     ```bash
-    nano /opt/saltbox_mod/saltbox_mod.yml
+    $EDITOR /opt/saltbox_mod/saltbox_mod.yml
     ```
 
     Add the following line under `roles:`:
+
     ```yaml
         - { role: newrole, tags: ['newrole'] }
     ```
 
     Final result:
+
     ```yaml
     ---
     - hosts: localhost
-    vars_files:
+      module_defaults:
+        ansible.builtin.setup:
+          fact_path: "/srv/git/saltbox/ansible_facts.d"
+      vars_files:
         - settings.yml
         - ['/srv/git/saltbox/accounts.yml', '/srv/git/saltbox/defaults/accounts.yml.default']
         - ['/srv/git/saltbox/settings.yml', '/srv/git/saltbox/defaults/settings.yml.default']
         - ['/srv/git/saltbox/adv_settings.yml', '/srv/git/saltbox/defaults/adv_settings.yml.default']
-    roles:
-        - { role: pre_tasks }
+      roles:
+        - { role: pre_tasks, tags: ['always', 'pre_tasks'] }
+        - { role: helloworld, tags: ['helloworld'] }
         - { role: myrole, tags: ['myrole'] }
         - { role: newrole, tags: ['newrole'] }
     ```
 
-    Note: The `pre_tasks` role is required and should not be removed.
+    Caution: The `pre_tasks` role is required and should not be removed.
 
-1. Run the Ansible role:
+1. Deploy the Ansible role:
 
+    ```bash
+    sb install mod-newrole
+    ```
+
+    Alternatively :
     ```bash
     sudo ansible-playbook saltbox_mod.yml --tags newrole
     ```
 
-
 ---
-Step 3 to 5 can be simplified by using the helloworld role  as a template.
-It should be usable without to much modification for most webapp that use a single web port.
+
+### From an Existing Role
+
+Steps 1 to 3 can be simplified by using the `helloworld` role as a template.
+It should be usable without too much modification for most web apps that use a single web port.
 
 ```bash
-cp -r /opt/saltbox_mod/roles/helloworld /opt/saltbox_mod/roles/newrole
-sed -i 's/helloworld/newrole/g' /opt/saltbox_mod/roles/defaults/main.yml
+cp -r /opt/saltbox_mod/roles/helloworld /opt/saltbox_mod/roles/newrole && \
+sed -i 's/helloworld/newrole/g' /opt/saltbox_mod/roles/newrole/*/main.yml
 ```
 
-then edit the defaults settings.
+Then edit the defaults settings:
 
 ```bash
-nano /opt/saltbox_mod/roles/newrole/tasks/main.yml
+$EDITOR /opt/saltbox_mod/roles/newrole/defaults/main.yml
 ```
 
-At the very minimum, you may expect to update the following variables:
+At the very minimum, you may expect to have to update the following variables:
+
 ```yaml
 newrole_web_port:
 newrole_docker_image:
 newrole_docker_envs_default:
 newrole_docker_volumes_default:
 ```
+
+Proceed to the remaining steps.
