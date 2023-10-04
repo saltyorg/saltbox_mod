@@ -47,7 +47,7 @@ git clone https://github.com/saltyorg/saltbox_mod.git /opt/saltbox_mod
     $EDITOR /opt/saltbox_mod/saltbox_mod.yml
     ```
 
-    Add the following line under `roles:`:
+    Add the following line in the appropriate section under `roles:`:
 
     ```yaml
         - { role: newrole, tags: ['newrole'] }
@@ -67,10 +67,13 @@ git clone https://github.com/saltyorg/saltbox_mod.git /opt/saltbox_mod
         - ['/srv/git/saltbox/settings.yml', '/srv/git/saltbox/defaults/settings.yml.default']
         - ['/srv/git/saltbox/adv_settings.yml', '/srv/git/saltbox/defaults/adv_settings.yml.default']
       roles:
+        # Reqs
         - { role: pre_tasks, tags: ['always', 'pre_tasks'] }
+        # Apps Start
         - { role: helloworld, tags: ['helloworld'] }
         - { role: myrole, tags: ['myrole'] }
         - { role: newrole, tags: ['newrole'] }
+        # Apps End
     ```
 
     Caution: The `pre_tasks` role is required and should not be removed.
