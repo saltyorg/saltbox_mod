@@ -5,7 +5,7 @@ Environment for managing custom Ansible roles within a Saltbox host.
 ## Installation
 
 ```bash
-sb install saltbox_mod
+sb install saltbox-mod
 ```
 
 Alternatively:
@@ -116,4 +116,4 @@ newrole_docker_envs_default:
 newrole_docker_volumes_default:
 ```
 
-Proceed to the remaining steps.
+Proceed to step 4.
